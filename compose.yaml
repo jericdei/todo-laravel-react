@@ -1,0 +1,62 @@
+name: primereact-todo-modal
+
+services:
+    app:
+        container_name: primereact-todo-modal-app
+        build:
+            context: .
+            args:
+                user: ${USER:-dei}
+                uid: ${UID:-1000}
+        restart: unless-stopped
+        tty: true
+        ports:
+            - 42069:5173
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        networks:
+            - primereact-todo-modal
+            
+    web:
+        image: nginx:alpine
+        container_name: primereact-todo-modal-web
+        restart: unless-stopped
+        tty: true
+        ports:
+            - 80
+        labels:
+            - "traefik.docker.network=dei"
+            - "traefik.http.routers.laravel-web.rule=Host(`primereact-todo-modal.localhost`)"
+        volumes:
+            - ./:/var/www
+            - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - primereact-todo-modal
+            - dei
+
+    database:
+        image: postgres:13.15-alpine
+        container_name: primereact-todo-modal-database
+        ports:
+            - 5555:5432
+        environment:
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_USER=user
+            - POSTGRES_DB=primereact_todo_modal
+        volumes:
+            - primereact_todo_modal_data:/var/lib/postgresql/data
+        networks:
+            - primereact-todo-modal
+
+networks:
+    dei:
+        external: true
+    primereact-todo-modal:
+
+
+volumes:
+    primereact_todo_modal_data:
