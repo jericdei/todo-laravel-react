@@ -8,6 +8,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.tsx',
+        "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
     ],
 
     theme: {
