@@ -5,7 +5,7 @@ import { useForm, usePage } from "@inertiajs/react";
 import { Button } from "primereact/button";
 import { Dialog, DialogProps } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { FormEvent, useCallback, useContext, useEffect } from "react";
+import { FormEvent, useContext, useEffect } from "react";
 
 export default function TodoFormModal(props: DialogProps & { todo?: Todo }) {
     const page = usePage<PageProps>();
@@ -38,7 +38,7 @@ export default function TodoFormModal(props: DialogProps & { todo?: Todo }) {
             onSuccess: (successPage: any) => {
                 form.reset("content");
 
-                toast?.current?.show({
+                toast.current?.show({
                     severity: successPage.props.toast.severity,
                     summary: successPage.props.toast.summary,
                     life: 3000,
